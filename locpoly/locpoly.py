@@ -20,11 +20,11 @@ def locpoly(endog, exog, lam, ixl, ri):
 
     Returns
     -------
-    A function f such that f(x)[0] is the estimated mean for covariate
-    vector x.  f has a keyword argument "omit" that contains a list of
-    case positions that are omitted when computing the value of f.
+    A function f such that f(x)[0] is the estimated mean corresponding to
+    covariate vector x.  f has a keyword argument "omit" that contains a
+    list of data rows that are omitted when computing the value of f.
     f(x)[1] are the coefficients used to produce the estimated mean,
-    these coefficients are applied to covariate vector that have been
+    these coefficients are applied to covariate vectors that have been
     centered on x.
     """
 
@@ -37,6 +37,7 @@ def locpoly(endog, exog, lam, ixl, ri):
         p = exog.shape[1] +1 + len(ii0)
 
     wexog = np.zeros((exog.shape[0], p))
+    p = exog.shape[1]
 
     def f(x, omit=None):
 
@@ -46,7 +47,6 @@ def locpoly(endog, exog, lam, ixl, ri):
 
         # Get the weights
         di = np.sum(dx**2, 1)
-        p = exog.shape[1]
         w = np.exp(-di / (2 * lam))
         w /= w.sum()
         if omit is not None:
@@ -58,7 +58,7 @@ def locpoly(endog, exog, lam, ixl, ri):
         wexog[:, 1:p+1] = dx * wr[:, None] # whitened main effects
         if ixl == 1:
             # whitened interactions
-            jj = exog.shape[1] +1
+            jj = exog.shape[1] + 1
             for i, j in zip(ii0, ii1):
                 wexog[:, jj] = dx[:, i] *dx[:, j] * wr
 

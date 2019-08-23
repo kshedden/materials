@@ -16,9 +16,9 @@ def lpreg_lco_cv(yvec, xmat, bw, clust, nbag=5, nrep=200):
     Parameters
     ----------
     yvec : array-like
-        The dependent variable
-    xvec : array-like
-        The independent variables, do not include an intercept.
+        The dependent variable (y)
+    xmat : array-like
+        The independent variables (x), do not include an intercept.
     bw : array-like
         The bandwidths, to be adjusted for sample size.
     clust : integer
@@ -36,7 +36,7 @@ def lpreg_lco_cv(yvec, xmat, bw, clust, nbag=5, nrep=200):
 
     Notes
     -----
-    Large values of nbag is expensive to compute, but increasing nrep
+    A large values of nbag is expensive for computation, but increasing nrep
     is cheap.
     """
 
@@ -47,7 +47,7 @@ def lpreg_lco_cv(yvec, xmat, bw, clust, nbag=5, nrep=200):
     # The dimension
     d = xmat.shape[1]
 
-    # Pre-compute the errors when using the whole training set at
+    # Pre-compute the errors using the whole training set at
     # each bandwidth
     pce = np.zeros((len(bw), len(omit0)))
     fxa = len(keep) ** (1 / (d + 4)) # bandwidth multiplier
