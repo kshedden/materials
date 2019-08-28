@@ -17,5 +17,4 @@ for v in vn:
     dx.loc[:, v + "_x"] = np.sqrt(dx.loc[:, v])
 vnx = [v + "_x" for v in vn]
 mnx = dx.loc[:, vnx].mean(0)
-dx.loc[:, vnx] -= mnx
 

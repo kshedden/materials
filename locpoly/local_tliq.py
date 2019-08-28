@@ -9,7 +9,7 @@ ixl = 0
 # a bit of ridging helps
 ri = 0.0001
 
-def lpreg_lco_cv(yvec, xmat, bw, clust, nbag=5, nrep=200):
+def lpreg_lco_cv(yvec, xmat, bw, clust, nbag=10, nrep=200):
     """
     Estimate the leave-cluster-out RMSE.
 
@@ -43,6 +43,13 @@ def lpreg_lco_cv(yvec, xmat, bw, clust, nbag=5, nrep=200):
     # Drop one cluster when training
     omit0 = np.flatnonzero(dx.cluster_id == clust)
     keep = np.flatnonzero(dx.cluster_id != clust)
+
+    xmat = xmat.copy()
+    xkeep = xmat[keep, :]
+    xmn = xkeep.mean(0)
+    xsd = xkeep.std(0)
+    xmat -= xmn
+    xmat /= xsd
 
     # The dimension
     d = xmat.shape[1]
@@ -108,8 +115,6 @@ def lpreg_lco_cv(yvec, xmat, bw, clust, nbag=5, nrep=200):
 # The data we are working with (melting point/liquidus temperature)
 yvec = np.asarray(dx.Tliq_C)
 xmat = np.asarray(dx.loc[:, vnx])
-xmat -= xmat.mean(0)
-xmat /= xmat.std(0)
 
 lco_range = np.arange(0.2, 1.8, 0.05)
 
